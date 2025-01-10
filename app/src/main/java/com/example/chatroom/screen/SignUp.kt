@@ -30,12 +30,13 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.chatroom.viewmodel.AuthViewModel
 
 
 @Composable
 fun SignUpScreen(
-  onNavigateToLogin: () -> Unit = {},
+  navController: NavController,
   authViewModel: AuthViewModel
 ) {
 
@@ -144,11 +145,7 @@ fun SignUpScreen(
                 } else {
                     showDialog = true
                 }
-                email = ""
-                password = ""
-                confirmpassword = ""
-                firstName = ""
-                lastName = ""
+
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -158,7 +155,7 @@ fun SignUpScreen(
         }
         Spacer(modifier = Modifier.height(16.dp))
         Text("Already have an account? Sign in.",
-            modifier = Modifier.clickable {onNavigateToLogin}
+            modifier = Modifier.clickable {navController.navigate(Screen.LoginScreen.route)}
         )
 
     }

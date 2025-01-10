@@ -28,4 +28,22 @@ class UserRepository (private val auth: FirebaseAuth,
         } catch (e: Exception) {
             Result.Error(e)
         }
+
+    fun getCurrentUser(): Result<User> {
+        return try {
+            val firebaseUser = auth.currentUser
+            if (firebaseUser != null) {
+                val user = User(
+                    email = firebaseUser.email ?: "",
+                    firstName = "", // You might want to fetch this from Firestore if needed
+                    lastName = "" // Same as above
+                )
+                Result.Success(user)
+            } else {
+                Result.Error(Exception("No user currently logged in"))
+            }
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
 }

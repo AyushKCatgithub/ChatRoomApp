@@ -10,10 +10,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.chatroom.screen.ChatRoomListScreen
+import com.example.chatroom.screen.ChatScreen
 import com.example.chatroom.screen.LoginScreen
 import com.example.chatroom.screen.Screen
 import com.example.chatroom.screen.SignUpScreen
@@ -53,17 +56,25 @@ fun NavigationGraph(
     ) {
         composable(Screen.SignupScreen.route) {
             SignUpScreen(
-                onNavigateToLogin = { navController.navigate(Screen.LoginScreen.route)},
+                navController = navController,
                 authViewModel = authViewModel
             )
         }
         composable(Screen.LoginScreen.route) {
             LoginScreen(
-                onNavigateToSignUp = { navController.navigate(Screen.SignupScreen.route) },
+                navController = navController,
                 authViewModel = authViewModel
-            ){
-                navController.navigate(Screen.ChatRoomsScreen.route)
+            )
+        }
+        composable(Screen.ChatRoomsScreen.route) {
+            ChatRoomListScreen(){
+                navController.navigate(Screen.ChatScreen.route + "/${it.id}")
             }
+        }
+        composable("${Screen.ChatScreen.route}/{roomId}") {
+            val roomId: String = it
+                .arguments?.getString("roomId") ?: ""
+            ChatScreen(roomId = roomId)
         }
     }
 
